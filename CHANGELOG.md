@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+## 0.2.3 - 2025-12-28
+- fix: resolve version bundle when imsg is invoked via symlinked path
+
 ## 0.2.2 - 2025-12-28
 - fix: include SwiftPM resource bundle in release + build outputs
 

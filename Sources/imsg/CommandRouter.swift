@@ -101,14 +101,33 @@ struct CommandRouter {
     {
       return envVersion
     }
-    if let url = Bundle.module.url(forResource: "version", withExtension: "txt"),
-      let value = try? String(contentsOf: url, encoding: .utf8)
-    {
-      let trimmed = value.trimmingCharacters(in: .whitespacesAndNewlines)
-      if !trimmed.isEmpty {
-        return trimmed
-      }
+    if let value = loadVersion(from: Bundle.module) {
+      return value
+    }
+    if let value = loadVersionFromExecutableBundle() {
+      return value
     }
     return "dev"
+  }
+
+  private static func loadVersion(from bundle: Bundle) -> String? {
+    guard let url = bundle.url(forResource: "version", withExtension: "txt"),
+      let value = try? String(contentsOf: url, encoding: .utf8)
+    else {
+      return nil
+    }
+    let trimmed = value.trimmingCharacters(in: .whitespacesAndNewlines)
+    return trimmed.isEmpty ? nil : trimmed
+  }
+
+  private static func loadVersionFromExecutableBundle() -> String? {
+    let executableURL = URL(fileURLWithPath: CommandLine.arguments[0])
+      .resolvingSymlinksInPath()
+    let bundleURL = executableURL.deletingLastPathComponent()
+      .appendingPathComponent("imsg_imsg.bundle")
+    guard let bundle = Bundle(url: bundleURL) else {
+      return nil
+    }
+    return loadVersion(from: bundle)
   }
 }
