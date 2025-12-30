@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.2.2 - Unreleased
+
 ## 0.2.1 - 2025-12-30
 - fix: avoid crash parsing long attributed bodies (>256 bytes) (thanks @tommybananas)
 
