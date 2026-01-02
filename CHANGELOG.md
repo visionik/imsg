@@ -1,11 +1,11 @@
 # Changelog
 
 ## Unreleased
-- feat: expose message guid + reply_to_guid metadata in JSON output
-- fix: exclude reaction rows from history/watch output and tighten reaction matching
-- fix: fall back to destination_caller_id when sender handle is missing
-- test: cover destination_caller_id sender fallback
+- feat: include `guid` and `reply_to_guid` metadata in JSON output
+- fix: hide reaction rows from history/watch output and improve reaction matching
+- fix: fill missing sender handles from `destination_caller_id` for outgoing/group messages
 - chore: remove private API send mode from main
+- test: add coverage for sender fallback
 
 ## 0.3.0 - 2026-01-02
 - feat: JSON-RPC server over stdin/stdout (`imsg rpc`) with chats, history, watch, and send
