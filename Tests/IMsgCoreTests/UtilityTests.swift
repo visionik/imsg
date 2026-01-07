@@ -148,6 +148,7 @@ func messageSenderUsesChatIdentifier() throws {
   try Data("hello".utf8).write(to: attachment)
   let attachmentsSubdirectory = tempDir.appendingPathComponent("staged")
   try fileManager.createDirectory(at: attachmentsSubdirectory, withIntermediateDirectories: true)
+
   var captured: [String] = []
   let sender = MessageSender(
     runner: { _, args in captured = args },
@@ -164,7 +165,7 @@ func messageSenderUsesChatIdentifier() throws {
       chatGUID: "ignored-guid"
     )
   )
-  #expect(captured[5] == "iMessage;+;chat123")
+  #expect(captured[5] == "ignored-guid")
   #expect(captured[6] == "1")
   #expect(captured[4] == "1")
 }
@@ -277,6 +278,28 @@ func messageSenderThrowsWhenAttachmentMissing() {
   }
 
   #expect(runnerCalled == false)
+}
+
+@Test
+func messageSenderTreatsHandleIdentifierAsRecipient() throws {
+  var captured: [String] = []
+  let sender = MessageSender(runner: { _, args in
+    captured = args
+  })
+  try sender.send(
+    MessageSendOptions(
+      recipient: "",
+      text: "hi",
+      attachmentPath: "",
+      service: .auto,
+      region: "US",
+      chatIdentifier: "+16502530000",
+      chatGUID: ""
+    )
+  )
+  #expect(captured[0] == "+16502530000")
+  #expect(captured[5].isEmpty)
+  #expect(captured[6] == "0")
 }
 
 @Test
